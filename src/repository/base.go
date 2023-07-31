@@ -22,6 +22,7 @@ type Repository interface {
 
 type repository struct {
 	config config.Config
+	key    string
 }
 
 func NewRepository(config config.Config) Repository {

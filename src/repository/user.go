@@ -2,7 +2,9 @@ package repository
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"restapi-altera/src/model"
 	"restapi-altera/src/model/request"
 	"restapi-altera/src/model/response"
@@ -23,31 +25,49 @@ func (r *repository) GetUserByID(ctx context.Context, id string) (*model.User, e
 
 func (r *repository) GetUserAllShoes(ctx context.Context, id string) (*response.UserShoes, error) {
 
-	var user *model.User
+	var resp *response.UserShoes
 
-	tx := r.config.Database().WithContext(ctx).Begin()
-
-	err := tx.Where("id = ?", id).First(&user).Error
+	//caching
+	r.key = fmt.Sprintf("allshoesUser%s", id)
+	data, err := r.config.Redis().Get(ctx, r.key)
 	if err != nil {
-		tx.Rollback()
-		return nil, err
+		var user *model.User
+		var AllShoes []*model.Shoes
+
+		tx := r.config.Database().WithContext(ctx).Begin()
+		err := tx.Where("id = ?", id).First(&user).Error
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		err = tx.Where("shoes_id = ?", user.RackId).Find(&AllShoes).Error
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		tx.Commit()
+
+		resp = &response.UserShoes{
+			Id:        user.Id,
+			Name:      user.Name,
+			Email:     user.Email,
+			RackShoes: AllShoes,
+		}
+
+		err = r.config.Redis().Set(ctx, r.key, resp)
+		if err != nil {
+			return nil, err
+		}
+
+		return resp, nil
+
 	}
 
-	var AllShoes []*model.Shoes
-
-	err = tx.Where("shoes_id = ?", user.RackId).Find(&AllShoes).Error
+	err = json.Unmarshal([]byte(data), &resp)
 	if err != nil {
-		tx.Rollback()
 		return nil, err
-	}
-
-	tx.Commit()
-
-	resp := &response.UserShoes{
-		Id:        user.Id,
-		Name:      user.Name,
-		Email:     user.Email,
-		RackShoes: AllShoes,
 	}
 
 	return resp, nil
@@ -113,7 +133,7 @@ func (r *repository) AddShoes(ctx context.Context, shoes *request.ReqUserShoes, 
 	}
 
 	tx.Commit()
-
+	r.config.Redis().Delete(ctx, r.key)
 	return nil
 
 }

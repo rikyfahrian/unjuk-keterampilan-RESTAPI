@@ -14,6 +14,7 @@ import (
 type Redis interface {
 	Set(ctx context.Context, key string, value interface{}) error
 	Get(ctx context.Context, key string) (string, error)
+	Delete(ctx context.Context, key string) error
 }
 
 type redisClient struct {
@@ -68,4 +69,14 @@ func (r *redisClient) Get(ctx context.Context, key string) (string, error) {
 
 	return val, nil
 
+}
+
+func (r *redisClient) Delete(ctx context.Context, key string) error {
+
+	err := r.rdb.Del(ctx, key).Err()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
