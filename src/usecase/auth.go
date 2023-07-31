@@ -16,6 +16,7 @@ import (
 func (u *usecase) Register(ctx context.Context, user request.UserRegister) error {
 
 	uuId := uuid.New()
+	uuId2 := uuid.New()
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 5)
 	if err != nil {
@@ -26,6 +27,7 @@ func (u *usecase) Register(ctx context.Context, user request.UserRegister) error
 	newUser.Id = uuId.String()
 	newUser.Name = user.Name
 	newUser.Email = user.Email
+	newUser.RackId = uuId2.String()
 	newUser.Password = string(passwordHash)
 
 	err = u.repo.Register(ctx, newUser)

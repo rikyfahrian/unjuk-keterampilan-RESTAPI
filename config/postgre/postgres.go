@@ -17,7 +17,7 @@ func InitPostgre() *gorm.DB {
 		panic("failed to connect postgres")
 	}
 
-	err = db.AutoMigrate(&model.User{})
+	err = db.AutoMigrate(&model.User{}, &model.Shoes{})
 	if err != nil {
 		panic(err.Error())
 	}

@@ -63,7 +63,7 @@ func (d *delivery) Login(c echo.Context) error {
 
 	c.SetCookie(cookie)
 
-	return helper.WriteResponse(c, http.StatusOK, "berhasil login", nil)
+	return helper.WriteResponse(c, http.StatusOK, "succesfully login", nil)
 
 }
 
@@ -72,10 +72,11 @@ func (d *delivery) Logout(c echo.Context) error {
 		Name:     "jwt",
 		Value:    "",
 		Expires:  time.Now().Add(-time.Hour),
+		Path:     "/user",
 		HttpOnly: true,
 	}
 
 	c.SetCookie(cookie)
 
-	return helper.WriteResponse(c, http.StatusOK, "berhasil logout", nil)
+	return helper.WriteResponse(c, http.StatusOK, "you are logout", nil)
 }
