@@ -224,6 +224,8 @@ func (r *repository) DeleteShoesByNoId(ctx context.Context, id string, noId int)
 	}
 
 	tx.Commit()
+	r.config.Redis().Delete(ctx, r.keyById)
+	r.config.Redis().Delete(ctx, r.keyAllShoes)
 
 	return nil
 }
