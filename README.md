@@ -8,14 +8,15 @@ hasil belajar dari course prakerja x altera
 
 Rest API ini menggunakan :
 
--Go Languange
--PostgreSQL (docker)
--Redis (docker)
--JWT
--Clean Architecture
--Validator Go-Playground
--Echo Framework
--Echo Middleware Logger
--Echo Middleware Recover
+Go Languange
+PostgreSQL (docker)
+Cache sederhana dengan Redis (docker)
+JWT
+Clean Architecture
+Validator Go-Playground
+Echo Framework
+Echo Middleware Logger
+Echo Middleware Recover
 
-Mohon maaf jika masih banyak salahnya :)
+Rest API ini menggunakan docker untuk menjalankannya
+
