@@ -1,0 +1,26 @@
+# @format
+
+version: "3"
+services:
+  golang:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+      - postgres
+    env_file:
+      - .env
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: restapi-altera
+    ports:
+      - "5432:5432"
