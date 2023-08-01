@@ -15,7 +15,24 @@ func (r *repository) GetUserByID(ctx context.Context, id string) (*model.User, e
 
 	var user *model.User
 
-	err := r.config.Database().WithContext(ctx).Where("id = ? ", id).First(&user).Error
+	r.keyUser = fmt.Sprintf("user:%s", id)
+
+	data, err := r.config.Redis().Get(ctx, r.keyUser)
+	if err != nil {
+		err := r.config.Database().WithContext(ctx).Where("id = ? ", id).First(&user).Error
+		if err != nil {
+			return nil, err
+		}
+
+		err = r.config.Redis().Set(ctx, r.keyUser, user)
+		if err != nil {
+			return nil, err
+		}
+
+		return user, nil
+	}
+
+	err = json.Unmarshal([]byte(data), &user)
 	if err != nil {
 		return nil, err
 	}
@@ -28,8 +45,8 @@ func (r *repository) GetUserAllShoes(ctx context.Context, id string) (*response.
 	var resp *response.UserShoes
 
 	//caching
-	r.key = fmt.Sprintf("allshoesUser%s", id)
-	data, err := r.config.Redis().Get(ctx, r.key)
+	r.keyAllShoes = fmt.Sprintf("allshoesuser:%s", id)
+	data, err := r.config.Redis().Get(ctx, r.keyAllShoes)
 	if err != nil {
 		var user *model.User
 		var AllShoes []*model.Shoes
@@ -56,7 +73,7 @@ func (r *repository) GetUserAllShoes(ctx context.Context, id string) (*response.
 			RackShoes: AllShoes,
 		}
 
-		err = r.config.Redis().Set(ctx, r.key, resp)
+		err = r.config.Redis().Set(ctx, r.keyAllShoes, resp)
 		if err != nil {
 			return nil, err
 		}
@@ -75,34 +92,48 @@ func (r *repository) GetUserAllShoes(ctx context.Context, id string) (*response.
 }
 
 func (r *repository) GetUserShoesByNoId(ctx context.Context, noId int, id string) (*response.UserShoes, error) {
+	var resp *response.UserShoes
 
-	var user *model.User
-
-	tx := r.config.Database().WithContext(ctx).Begin()
-
-	err := tx.Where("id = ?", id).First(&user).Error
+	r.keyById = fmt.Sprintf("shoes%s:%d", id, noId)
+	data, err := r.config.Redis().Get(ctx, r.keyById)
 	if err != nil {
-		tx.Rollback()
+		var user *model.User
+		var Shoes *model.Shoes
+
+		tx := r.config.Database().WithContext(ctx).Begin()
+		err := tx.Where("id = ?", id).First(&user).Error
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		err = tx.Where("shoes_id = ? AND no_id = ?", user.RackId, noId).First(&Shoes).Error
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		tx.Commit()
+
+		resp = &response.UserShoes{
+			Id:        user.Id,
+			Name:      user.Name,
+			Email:     user.Email,
+			RackShoes: Shoes,
+		}
+
+		err = r.config.Redis().Set(ctx, r.keyById, resp)
+		if err != nil {
+			return nil, err
+		}
+
+		return resp, nil
+	}
+
+	err = json.Unmarshal([]byte(data), &resp)
+	if err != nil {
 		return nil, err
 	}
-
-	var Shoes *model.Shoes
-
-	err = tx.Where("shoes_id = ? AND no_id = ?", user.RackId, noId).First(&Shoes).Error
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
-
-	tx.Commit()
-
-	resp := &response.UserShoes{
-		Id:        user.Id,
-		Name:      user.Name,
-		Email:     user.Email,
-		RackShoes: Shoes,
-	}
-
 	return resp, nil
 
 }
@@ -133,7 +164,7 @@ func (r *repository) AddShoes(ctx context.Context, shoes *request.ReqUserShoes, 
 	}
 
 	tx.Commit()
-	r.config.Redis().Delete(ctx, r.key)
+	r.config.Redis().Delete(ctx, r.keyAllShoes)
 	return nil
 
 }
@@ -163,7 +194,8 @@ func (r *repository) UpdateShoesByNoId(ctx context.Context, noId int, id string,
 	}
 
 	tx.Commit()
-
+	r.config.Redis().Delete(ctx, r.keyById)
+	r.config.Redis().Delete(ctx, r.keyAllShoes)
 	return nil
 
 }
