@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"restapi-altera/src/model"
 	"restapi-altera/src/repository"
 	"testing"
 
@@ -12,15 +13,32 @@ import (
 
 var repoMock = &repository.RepositoryMock{Mock: mock.Mock{}}
 var usecaseMock = usecase{repo: repoMock}
+var ctx = context.Background()
 
-func TestGetUserById(t *testing.T) {
+func TestGetUserByIdFail(t *testing.T) {
 
-	ctx := context.Background()
+	//testgagal
 
-	repoMock.Mock.On("GetUserById", ctx, "uuid").Return(nil, errors.New("not found"))
+	repoMock.Mock.On("GetUserByID", ctx, "uuid").Return(nil, errors.New("not found"))
 
 	user, err := usecaseMock.GetUserByID(ctx, "uuid")
 	assert.Nil(t, user)
 	assert.NotNil(t, err)
 
+}
+
+func TestGetUserByIDSucces(t *testing.T) {
+	userSample := &model.User{
+		Id:       "uuid2",
+		Name:     "riky",
+		Email:    "rikyfhrian@gmail.com",
+		Password: "23",
+		RackId:   "23",
+	}
+
+	repoMock.Mock.On("GetUserByID", ctx, "uuid2").Return(userSample, nil)
+
+	user, _ := usecaseMock.GetUserByID(ctx, "uuid2")
+
+	assert.Equal(t, userSample.Name, user.Name)
 }

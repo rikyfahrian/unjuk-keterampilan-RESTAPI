@@ -14,24 +14,25 @@ type RepositoryMock struct {
 	Mock mock.Mock
 }
 
-func (rm *RepositoryMock) Register(ctx context.Context, user *model.User) error {
-	panic("implement me")
-}
-func (rm *RepositoryMock) Login(ctx context.Context, user *request.UserLogin) (*model.User, error) {
-	panic("implement me")
-}
-
 func (rm *RepositoryMock) GetUserByID(ctx context.Context, id string) (*model.User, error) {
 	arguments := rm.Mock.Called(ctx, id)
 
 	if arguments.Get(0) == nil {
 		return nil, errors.New("not found")
+	} else {
+
+		user := arguments.Get(0).(*model.User)
+
+		return user, nil
 	}
 
-	user := arguments.Get(0).(model.User)
+}
 
-	return &user, nil
-
+func (rm *RepositoryMock) Register(ctx context.Context, user *model.User) error {
+	panic("implement me")
+}
+func (rm *RepositoryMock) Login(ctx context.Context, user *request.UserLogin) (*model.User, error) {
+	panic("implement me")
 }
 
 func (rm *RepositoryMock) GetUserAllShoes(ctx context.Context, id string) (*response.UserShoes, error) {

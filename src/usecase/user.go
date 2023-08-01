@@ -10,12 +10,13 @@ import (
 
 func (u *usecase) GetUserByID(ctx context.Context, cookie string) (*model.User, error) {
 
-	claims, err := u.getJWTClaims(cookie)
-	if err != nil {
-		return nil, err
-	}
+	//untuk mock di disable dulu
+	// claims, err := u.getJWTClaims(cookie)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	user, err := u.repo.GetUserByID(ctx, claims.Issuer)
+	user, err := u.repo.GetUserByID(ctx, cookie)
 	if err != nil {
 		return nil, errors.New("user not found")
 	}
