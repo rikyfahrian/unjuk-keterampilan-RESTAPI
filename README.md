@@ -6,6 +6,16 @@ Repository tugas akhir mengikuti course prakerja x altera. yaitu unjuk keterampi
 
 hasil belajar dari course prakerja x altera
 
-Rest API ini menggunakan beberapa tools :
+Rest API ini menggunakan :
 
 -Go Languange
+-PostgreSQL (docker)
+-Redis (docker)
+-JWT
+-Clean Architecture
+-Validator Go-Playground
+-Echo Framework
+-Echo Middleware Logger
+-Echo Middleware Recover
+
+Mohon maaf jika masih banyak salahnya :)
