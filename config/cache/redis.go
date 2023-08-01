@@ -3,7 +3,6 @@ package cache
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -31,12 +30,10 @@ func InitRedis() Redis {
 		DB:       db,
 	})
 
-	ping, err := rdb.Ping(context.Background()).Result()
+	_, err := rdb.Ping(context.Background()).Result()
 	if err != nil {
 		panic(err.Error())
 	}
-
-	fmt.Println(ping)
 
 	return &redisClient{
 		rdb: rdb,
