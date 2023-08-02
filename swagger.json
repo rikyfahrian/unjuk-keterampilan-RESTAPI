@@ -1,0 +1,482 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "User Shoes REST API",
+    "version": "1",
+    "description": "OpenAPI for user shoes Rest API",
+    "termsOfService": "github.com/rikyfahrian",
+    "contact": {
+      "name": "Mohamad Riki Fahrian",
+      "email": "rikyfhrian@gmail.com",
+      "url": "github.com/rikyfahrian"
+    },
+    "license": {
+      "name": "APACHE 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "servers": [
+    {
+      "url": "localhost:8080"
+    }
+  ],
+  "externalDocs": {
+    "description": "Github rikyfahrian",
+    "url": "https://github.com/rikyfahrian/unjuk-keterampilan-RESTAPI"
+  },
+  "tags": [
+    {
+      "name": "auth",
+      "description": "authentication grouping"
+    },
+    {
+      "name": "user",
+      "description": "user path"
+    }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "for login user",
+        "description": "to log in a user who already has an account, if you don't have an account yet, you must first register via the url '/auth/register'",
+        "requestBody": {
+          "description": "login user to get session",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["email", "password"],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "rikyfhrian@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "rahasia"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "successfuly login"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "for register user",
+        "description": "to register for users who do not have an account, after registering you can login",
+        "requestBody": {
+          "description": "register user to make a account",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["name", "email", "password"],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "riky"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "rikyfhrian@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "rahasia"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful register user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "successfuly register user"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "logout user",
+        "description": "to remove the logged in user, there is no need for a request body as logging out will delete the logged in user's session",
+        "responses": {
+          "200": {
+            "description": "Successful register user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you are logout"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": ["user"],
+        "summary": "get users who already login",
+        "description": "displays user data that is already logged in, if the user url is accessed before logging in it will return an unauthorized error",
+        "responses": {
+          "200": {
+            "description": "Successful get user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "hi riky"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "281cec03-ae04-442a-9b0c-25aa1e5196e9"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "riky"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "rikyfhrian@gmail.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/shoes": {
+      "get": {
+        "tags": ["user"],
+        "summary": "get user shoes who already login",
+        "description": "displays users shoes data that is already logged in, if the user url is accessed before logging in it will return an unauthorized error",
+        "responses": {
+          "200": {
+            "description": "Successful get user shoes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "hi riky"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "281cec03-ae04-442a-9b0c-25aa1e5196e9"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "riky"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "rikyfhrian@gmail.com"
+                        },
+                        "shoes": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "add_at": {
+                                "type": "string",
+                                "example": "01 Aug 23 14:52 UTC"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Nike SB Blazer"
+                              },
+                              "size": {
+                                "type": "number",
+                                "example": 40
+                              },
+                              "no_id": {
+                                "type": "number",
+                                "example": 2
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["user"],
+        "summary": "add new shoes",
+        "description": "to add a new shoes data to the user's shoe rack",
+        "requestBody": {
+          "description": "add new shoes",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["name", "size"],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Nike SB Dunk Low Pro"
+                  },
+                  "size": {
+                    "type": "number",
+                    "example": 40
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Add Shoes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "new shoes successfuly added"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/shoes/:no_id": {
+      "get": {
+        "tags": ["user"],
+        "summary": "get user shoes by no_id shoes",
+        "description": "displays users shoes data that is already logged in, if the user url is accessed before logging in it will return an unauthorized error",
+        "responses": {
+          "200": {
+            "description": "successful get user shoes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "hi riky"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "281cec03-ae04-442a-9b0c-25aa1e5196e9"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "riky"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "rikyfhrian@gmail.com"
+                        },
+                        "shoes": {
+                          "type": "object",
+                          "properties": {
+                            "add_at": {
+                              "type": "string",
+                              "example": "01 Aug 23 14:52 UTC"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Nike SB Blazer"
+                            },
+                            "size": {
+                              "type": "number",
+                              "example": 40
+                            },
+                            "no_id": {
+                              "type": "number",
+                              "example": 2
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["user"],
+        "summary": "edit shoes by no id shoes",
+        "description": "to edit shoes data ",
+        "requestBody": {
+          "description": "edit shoes",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": ["name", "size"],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Nike SB Dunk Low Pro"
+                  },
+                  "size": {
+                    "type": "number",
+                    "example": 40
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful edit shoes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "succesfully updated data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["user"],
+        "summary": "delete shoes by no id shoes",
+        "description": "delete shoes data ",
+        "responses": {
+          "200": {
+            "description": "successful delete shoes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "succesfully deleted shoes"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
