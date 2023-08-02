@@ -1,30 +1,39 @@
 <!-- @format -->
 
-# unjuk-keterampilan-RESTAPI
+# unjuk keterampilan RESTAPI
 
-Repository tugas akhir mengikuti course prakerja x altera. yaitu unjuk keterampilan membuat REST API
+## Deskripsi
 
-hasil belajar dari course prakerja x altera
+Ini adalah repository tugas akhir mengikuti course prakerja x altera. yaitu unjuk keterampilan membuat REST API
 
 Rest API ini menggunakan :
 
-Go Languange
+-Go Languange
 
-PostgreSQL (docker)
+-PostgreSQL (docker)
 
-Cache sederhana dengan Redis (docker)
+-Cache sederhana dengan Redis (docker)
 
-JWT
+-JWT
 
-Clean Architecture
+-Clean Architecture
 
-Validator Go-Playground
+-Validator Go-Playground
 
-Echo Framework
+-Echo Framework
 
-Echo Middleware Logger
+-Echo Middleware Logger
 
-Echo Middleware Recover
+-Echo Middleware Recover
 
-Rest API ini menggunakan docker untuk menjalankannya
+### untuk menjalankan projek ini
 
+> pastikan kamu punya docker
+
+1. ubah file .env.sample menjadi .env
+
+#### Run docker compose
+
+```bash
+$ docker-compose up
+```
