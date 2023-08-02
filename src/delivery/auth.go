@@ -50,7 +50,7 @@ func (d *delivery) Login(c echo.Context) error {
 
 	token, err := d.usecase.Login(ctx, user)
 	if err != nil {
-		return helper.WriteResponse(c, http.StatusBadRequest, err.Error(), nil)
+		return helper.WriteResponse(c, http.StatusNotFound, err.Error(), nil)
 	}
 
 	cookie := &http.Cookie{

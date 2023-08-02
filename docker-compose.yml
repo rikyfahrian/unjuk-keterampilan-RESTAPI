@@ -12,6 +12,8 @@ services:
       - postgres
     env_file:
       - .env
+    volumes:
+      - my_data:/app/data
   redis:
     image: redis:latest
     ports:
@@ -24,3 +26,6 @@ services:
       POSTGRES_DB: restapi-altera
     ports:
       - "5432:5432"
+
+volumes:
+  my_data:
