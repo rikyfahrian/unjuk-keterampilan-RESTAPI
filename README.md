@@ -35,5 +35,9 @@ Rest API ini menggunakan :
 #### Run docker compose
 
 ```bash
+$ docker-compose build
+```
+
+```bash
 $ docker-compose up
 ```
