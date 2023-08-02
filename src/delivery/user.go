@@ -22,7 +22,7 @@ func (d *delivery) GetUserByID(c echo.Context) error {
 
 	data, err := d.usecase.GetUserByID(ctx, cookie.Value)
 	if err != nil {
-		return helper.WriteResponse(c, http.StatusInternalServerError, err.Error(), nil)
+		return helper.WriteResponse(c, http.StatusNotFound, err.Error(), nil)
 	}
 
 	return helper.WriteResponse(c, http.StatusOK, fmt.Sprintf("hi %s", data.Name), data)
