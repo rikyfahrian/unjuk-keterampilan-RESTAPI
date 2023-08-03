@@ -41,3 +41,9 @@ $ docker-compose build
 ```bash
 $ docker-compose up
 ```
+
+flow 
+
+![Laporan TUgas](https://github.com/bxcodec/go-clean-arch/assets/83137034/ba40423a-1bbd-46a3-88a7-447c443126e0)
+
+
